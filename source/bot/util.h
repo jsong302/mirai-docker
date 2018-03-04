@@ -12,7 +12,7 @@ int util_atoi(char *, int);
 char *util_itoa(int, int, char *);
 int util_memsearch(char *, int, char *, int);
 int util_stristr(char *, int, char *);
-ipv4_t util_local_addr(char*);
+ipv4_t util_local_addr(void);
 char *util_fdgets(char *, int, int);
 
 static inline int util_isupper(char);

@@ -231,48 +231,30 @@ int util_stristr(char *haystack, int haystack_len, char *str)
     return -1;
 }
 
-ipv4_t util_local_addr(char* ipAddress)
+ipv4_t util_local_addr(void)
 {
-//    int fd;
-//    struct sockaddr_in addr;
-//    socklen_t addr_len = sizeof (addr);
-//
-//    errno = 0;
-//    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
-//    {
-//#ifdef DEBUG
-//        printf("[util] Failed to call socket(), errno = %d\n", errno);
-//#endif
-//        return 0;
-//    }
-//
-//    addr.sin_family = AF_INET;
-//    addr.sin_addr.s_addr = INET_ADDR(8,8,8,8);
-//    addr.sin_port = htons(53);
-//
-//    connect(fd, (struct sockaddr *)&addr, sizeof (struct sockaddr_in));
-//
-//    getsockname(fd, (struct sockaddr *)&addr, &addr_len);
-//    close(fd);
-//    return addr.sin_addr.s_addr;
+    int fd;
+    struct sockaddr_in addr;
+    socklen_t addr_len = sizeof (addr);
 
-    // http://stackoverflow.com/a/36078447
-    uint8_t ipbytes[4]={};
-    int i =0;
-    int8_t j=3;
-    while (ipAddress+i && i<util_strlen(ipAddress))
+    errno = 0;
+    if ((fd = socket(AF_INET, SOCK_DGRAM, 0)) == -1)
     {
-       char digit = ipAddress[i];
-       if (util_isdigit(digit) == 0 && digit!='.'){
-           return 0;
-       }
-        j=digit=='.'?j-1:j;
-       ipbytes[j]= ipbytes[j]*10 + atoi(&digit);
-
-        i++;
+#ifdef DEBUG
+        printf("[util] Failed to call socket(), errno = %d\n", errno);
+#endif
+        return 0;
     }
 
-    return INET_ADDR(ipbytes[3], ipbytes[2], ipbytes[1], ipbytes[0]);
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INET_ADDR(10,10,10,5);
+    addr.sin_port = htons(53);
+
+    connect(fd, (struct sockaddr *)&addr, sizeof (struct sockaddr_in));
+
+    getsockname(fd, (struct sockaddr *)&addr, &addr_len);
+    close(fd);
+    return addr.sin_addr.s_addr;
 }
 
 char *util_fdgets(char *buffer, int buffer_size, int fd)

